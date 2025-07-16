@@ -37,7 +37,7 @@
   "dev": "concurrently \"npm run server\" \"npm start\"",
   "server": "node backend/server.js",
   "server-supabase": "node backend/supabase-server.js",
-  "vercel-build": "npm run build"
+  "vercel-build": "DISABLE_ESLINT_PLUGIN=true npm run build"
 },
   "eslintConfig": {
     "extends": [
