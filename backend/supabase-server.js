@@ -18,6 +18,32 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 console.log('🚀 Servidor Feraben CRM iniciando con Supabase...');
 
 // ===============================================
+// UTILIDADES
+// ===============================================
+
+function calcularSaldoCliente(movimientos) {
+  return movimientos.reduce((total, mov) => total + parseFloat(mov.importe), 0);
+}
+
+function formatearMoneda(amount) {
+  return new Intl.NumberFormat('es-UY', {
+    style: 'currency',
+    currency: 'UYU',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
+function formatearFecha(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('es-UY', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+}
+
+// ===============================================
 // RUTAS BÁSICAS
 // ===============================================
 
@@ -42,13 +68,26 @@ app.get('/api/clientes', async (req, res) => {
     
     if (error) throw error;
     
-    // Formatear respuesta para compatibilidad
-    const clientesFormateados = clientes.map(cliente => ({
-      ...cliente,
-      vendedor_nombre: cliente.usuarios?.nombre || 'Sin vendedor'
-    }));
+    // Obtener movimientos para calcular saldos
+    const { data: todosMovimientos, error: movError } = await supabase
+      .from('movimientos')
+      .select('cliente_id, importe');
     
-    res.json(clientesFormateados);
+    if (movError) throw movError;
+    
+    // Calcular saldo para cada cliente
+    const clientesConSaldo = clientes.map(cliente => {
+      const movimientosCliente = todosMovimientos.filter(m => m.cliente_id === cliente.id);
+      const saldo = calcularSaldoCliente(movimientosCliente);
+      
+      return {
+        ...cliente,
+        vendedor_nombre: cliente.usuarios?.nombre || 'Sin vendedor',
+        saldo_actual: saldo
+      };
+    });
+    
+    res.json(clientesConSaldo);
   } catch (error) {
     console.error('Error obteniendo clientes:', error);
     res.status(500).json({ error: error.message });
@@ -71,12 +110,26 @@ app.get('/api/clientes/vendedor/:vendedorId', async (req, res) => {
     
     if (error) throw error;
     
-    const clientesFormateados = clientes.map(cliente => ({
-      ...cliente,
-      vendedor_nombre: cliente.usuarios?.nombre || 'Sin vendedor'
-    }));
+    // Obtener movimientos para calcular saldos
+    const { data: todosMovimientos, error: movError } = await supabase
+      .from('movimientos')
+      .select('cliente_id, importe')
+      .in('cliente_id', clientes.map(c => c.id));
     
-    res.json(clientesFormateados);
+    if (movError) throw movError;
+    
+    const clientesConSaldo = clientes.map(cliente => {
+      const movimientosCliente = todosMovimientos.filter(m => m.cliente_id === cliente.id);
+      const saldo = calcularSaldoCliente(movimientosCliente);
+      
+      return {
+        ...cliente,
+        vendedor_nombre: cliente.usuarios?.nombre || 'Sin vendedor',
+        saldo_actual: saldo
+      };
+    });
+    
+    res.json(clientesConSaldo);
   } catch (error) {
     console.error('Error obteniendo clientes por vendedor:', error);
     res.status(500).json({ error: error.message });
@@ -186,6 +239,69 @@ app.post('/api/movimientos', async (req, res) => {
 });
 
 // ===============================================
+// RUTAS DE COMISIONES
+// ===============================================
+
+app.get('/api/comisiones/config', async (req, res) => {
+  try {
+    const { data: configs, error } = await supabase
+      .from('vendedores_config')
+      .select(`
+        *,
+        usuarios!usuario_id (nombre, rol)
+      `)
+      .eq('activo', true)
+      .order('id');
+    
+    if (error) throw error;
+    
+    const configsFormateadas = configs.map(config => ({
+      ...config,
+      nombre: config.usuarios?.nombre || 'Usuario desconocido',
+      rol: config.usuarios?.rol || 'vendedor'
+    }));
+    
+    res.json(configsFormateadas);
+  } catch (error) {
+    console.error('Error obteniendo configuraciones:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/comisiones/config/:vendedorId', async (req, res) => {
+  try {
+    const { vendedorId } = req.params;
+    
+    const { data: config, error } = await supabase
+      .from('vendedores_config')
+      .select(`
+        *,
+        usuarios!usuario_id (nombre, rol)
+      `)
+      .eq('usuario_id', vendedorId)
+      .eq('activo', true)
+      .single();
+    
+    if (error && error.code !== 'PGRST116') throw error;
+    
+    if (!config) {
+      return res.status(404).json({ error: 'Configuración no encontrada' });
+    }
+    
+    const configFormateada = {
+      ...config,
+      nombre: config.usuarios?.nombre || 'Usuario desconocido',
+      rol: config.usuarios?.rol || 'vendedor'
+    };
+    
+    res.json(configFormateada);
+  } catch (error) {
+    console.error('Error obteniendo configuración:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===============================================
 // RUTAS DE EXPORTACIÓN
 // ===============================================
 
@@ -269,12 +385,13 @@ app.post('/api/clientes/:clienteId/exportar-estado-cuenta', async (req, res) => 
 app.listen(PORT, () => {
   console.log(`🚀 Servidor Feraben CRM funcionando en puerto ${PORT}`);
   console.log(`📊 Conectado a Supabase: ${supabaseUrl}`);
-  console.log(`\n🎯 RUTAS PRINCIPALES DISPONIBLES:`);
+  console.log(`\n🎯 TODAS LAS RUTAS DISPONIBLES:`);
   console.log(`   📈 Health: GET /api/health`);
   console.log(`   👥 Clientes: GET /api/clientes`);
   console.log(`   💰 Movimientos: GET /api/movimientos`);
   console.log(`   📄 Exportación: POST /api/clientes/:id/exportar-estado-cuenta`);
-  console.log(`\n✅ Backend listo para deploy en la nube!`);
+  console.log(`   ⚙️ Comisiones: GET /api/comisiones/config`);
+  console.log(`\n✅ Backend completo listo!`);
 });
 
 module.exports = app;
