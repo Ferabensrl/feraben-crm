@@ -44,3 +44,18 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## Environment variables
+
+The backend requires the following variables to connect to Supabase:
+
+```
+SUPABASE_URL=<your supabase url>
+SUPABASE_ANON_KEY=<your anon key>
+```
+
+Create a `.env` file based on `.env.example` and fill in your credentials. When running `npm run server-supabase` the values from `.env` will be loaded automatically.
+
+### Vercel deployment
+
+In your Vercel project settings add `SUPABASE_URL` and `SUPABASE_ANON_KEY` as Environment Variables so that the server can access Supabase in production.
