@@ -2,14 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { 
   X, 
   Calculator, 
-  DollarSign, 
   AlertCircle, 
   CheckCircle, 
   FileText, 
   CreditCard,
   Banknote,
-  Download,
-  UserCheck,
   Zap
 } from 'lucide-react';
 import apiService from '../services/api';

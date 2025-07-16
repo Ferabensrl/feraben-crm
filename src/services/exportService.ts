@@ -239,4 +239,5 @@ class ExportService {
   }
 }
 
-export default new ExportService();
+const exportService = new ExportService();
+export default exportService;

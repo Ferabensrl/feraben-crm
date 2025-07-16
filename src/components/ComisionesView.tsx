@@ -5,22 +5,16 @@ import {
   FileText, 
   TrendingUp, 
   Users, 
-  Calendar,
   DollarSign,
   CheckCircle,
-  Clock,
   AlertCircle,
   Plus,
-  Download,
   Eye,
   Edit,
-  Zap,
-  Receipt
-  // REMOVIDO: FilePdf - No existe en lucide-react
+  Zap
 } from 'lucide-react';
 import apiService from '../services/api';
 import FormularioLiquidacionAvanzada from './FormularioLiquidacionAvanzada';
-import exportLiquidacionService from '../services/exportLiquidacionService';
 
 interface ComisionesViewProps {
   currentUser: {

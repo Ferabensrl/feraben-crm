@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, FileText, DollarSign, BarChart3, LogOut, Menu, X, Download, FileDown, Plus, Calculator } from 'lucide-react';
+import { Users, FileText, DollarSign, BarChart3, LogOut, Menu, X, Download, FileDown, Plus } from 'lucide-react';
 import apiService, { Cliente, Movimiento } from './services/api';
 import exportService from './services/exportService';
 import './App.css';
