@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Users, FileText, DollarSign, BarChart3, LogOut, Menu, X, Download, FileDown, Plus } from 'lucide-react';
 import apiService, { Cliente, Movimiento } from './services/api';
-import exportService from './services/exportService';
 import './App.css';
 import { FormularioMovimiento, NuevoMovimiento } from './components/FormularioMovimiento';
 import ComisionesView from './components/ComisionesView';
@@ -42,11 +41,14 @@ function App() {
   const loadData = async () => {
     try {
       setState(prev => ({ ...prev, isLoading: true }));
+      console.log('🔄 Cargando datos...');
       
       const [clientesData, movimientosData] = await Promise.all([
         apiService.getClientes(),
         apiService.getMovimientos()
       ]);
+
+      console.log('✅ Datos cargados:', { clientes: clientesData.length, movimientos: movimientosData.length });
 
       setState(prev => ({
         ...prev,
@@ -55,8 +57,9 @@ function App() {
         isLoading: false,
       }));
     } catch (error) {
-      console.error('Error cargando datos:', error);
+      console.error('❌ Error cargando datos:', error);
       setState(prev => ({ ...prev, isLoading: false }));
+      alert('Error cargando datos. Revisa la consola.');
     }
   };
 
@@ -72,8 +75,10 @@ function App() {
   const handleVerEstadoCuenta = async (clienteId: number) => {
     try {
       setState(prev => ({ ...prev, isLoading: true }));
+      console.log(`🔍 Cargando estado de cuenta para cliente ${clienteId}`);
       
       const estadoCuenta = await apiService.getEstadoCuenta(clienteId);
+      console.log('✅ Estado de cuenta cargado:', estadoCuenta.length, 'movimientos');
       
       setState(prev => ({
         ...prev,
@@ -83,8 +88,9 @@ function App() {
         isLoading: false,
       }));
     } catch (error) {
-      console.error('Error cargando estado de cuenta:', error);
+      console.error('❌ Error cargando estado de cuenta:', error);
       setState(prev => ({ ...prev, isLoading: false }));
+      alert('Error cargando estado de cuenta');
     }
   };
 
@@ -107,18 +113,21 @@ function App() {
   const getStatsForUser = () => {
     if (state.currentUser?.rol === 'admin') {
       // Admin ve TODO
+      const clientesConDeuda = state.clientes.filter(c => {
+        // ✅ CORREGIDO: Usar saldo_actual del backend
+        return (c as any).saldo_actual > 0;
+      }).length;
+
+      const totalDeuda = state.clientes.reduce((total, cliente) => {
+        // ✅ CORREGIDO: Usar saldo_actual del backend
+        const saldo = (cliente as any).saldo_actual || 0;
+        return total + (saldo > 0 ? saldo : 0);
+      }, 0);
+
       return {
         totalClientes: state.clientes.length,
-        clientesConDeuda: state.clientes.filter(c => {
-          const movimientosCliente = state.movimientos.filter(m => m.cliente_id === c.id);
-          const saldo = apiService.calcularSaldoCliente(movimientosCliente);
-          return saldo > 0;
-        }).length,
-        totalDeuda: state.clientes.reduce((total, cliente) => {
-          const movimientosCliente = state.movimientos.filter(m => m.cliente_id === cliente.id);
-          const saldo = apiService.calcularSaldoCliente(movimientosCliente);
-          return total + (saldo > 0 ? saldo : 0);
-        }, 0),
+        clientesConDeuda,
+        totalDeuda,
         movimientosEsteMes: state.movimientos.filter(m => {
           const fecha = new Date(m.fecha);
           const ahora = new Date();
@@ -131,18 +140,21 @@ function App() {
       const misClientes = state.clientes.filter(c => c.vendedor_id === state.currentUser?.id);
       const misMovimientos = state.movimientos.filter(m => m.vendedor_id === state.currentUser?.id);
       
+      const clientesConDeuda = misClientes.filter(c => {
+        // ✅ CORREGIDO: Usar saldo_actual del backend
+        return (c as any).saldo_actual > 0;
+      }).length;
+
+      const totalDeuda = misClientes.reduce((total, cliente) => {
+        // ✅ CORREGIDO: Usar saldo_actual del backend
+        const saldo = (cliente as any).saldo_actual || 0;
+        return total + (saldo > 0 ? saldo : 0);
+      }, 0);
+      
       return {
         totalClientes: misClientes.length,
-        clientesConDeuda: misClientes.filter(c => {
-          const movimientosCliente = misMovimientos.filter(m => m.cliente_id === c.id);
-          const saldo = apiService.calcularSaldoCliente(movimientosCliente);
-          return saldo > 0;
-        }).length,
-        totalDeuda: misClientes.reduce((total, cliente) => {
-          const movimientosCliente = misMovimientos.filter(m => m.cliente_id === cliente.id);
-          const saldo = apiService.calcularSaldoCliente(movimientosCliente);
-          return total + (saldo > 0 ? saldo : 0);
-        }, 0),
+        clientesConDeuda,
+        totalDeuda,
         movimientosEsteMes: misMovimientos.filter(m => {
           const fecha = new Date(m.fecha);
           const ahora = new Date();
@@ -250,7 +262,6 @@ function App() {
               {state.activeView === 'clientes' && (
                 <ClientesView 
                   clientes={state.clientes} 
-                  movimientos={state.movimientos}
                   currentUser={state.currentUser}
                   onVerEstadoCuenta={handleVerEstadoCuenta}
                 />
@@ -264,11 +275,15 @@ function App() {
                 />
               )}
               {state.activeView === 'movimientos' && state.currentUser.rol === 'admin' && (
-                <MovimientosView movimientos={state.movimientos} clientes={state.clientes} onRefresh={loadData} />
+                <MovimientosView 
+                  movimientos={state.movimientos} 
+                  clientes={state.clientes} 
+                  onRefresh={loadData} 
+                />
               )}
               {state.activeView === 'comisiones' && (
-  <ComisionesView currentUser={state.currentUser} />
-)}
+                <ComisionesView currentUser={state.currentUser} />
+              )}
             </>
           )}
         </main>
@@ -350,8 +365,8 @@ const DashboardView: React.FC<{
         {stats.tipoUsuario === 'admin' ? (
           <>
             <p>✅ Sistema funcionando correctamente</p>
-            <p>📊 Base de datos SQLite local</p>
-            <p>🔒 Datos seguros en tu PC</p>
+            <p>📊 Base de datos en Supabase (cloud)</p>
+            <p>🔒 Datos seguros en la nube</p>
             <p>📱 Interfaz responsive para móviles</p>
             <p>👥 Acceso completo a todos los módulos</p>
             <p>💰 Sistema de comisiones integrado</p>
@@ -391,13 +406,12 @@ const StatCard: React.FC<{
   </div>
 );
 
-// Vista de Clientes
+// ✅ Vista de Clientes CORREGIDA
 const ClientesView: React.FC<{
   clientes: Cliente[];
-  movimientos: Movimiento[];
   currentUser: { id: number; rol: string };
   onVerEstadoCuenta: (clienteId: number) => void;
-}> = ({ clientes, movimientos, currentUser, onVerEstadoCuenta }) => {
+}> = ({ clientes, currentUser, onVerEstadoCuenta }) => {
   const clientesFiltrados = currentUser.rol === 'admin' 
     ? clientes 
     : clientes.filter(c => c.vendedor_id === currentUser.id);
@@ -433,8 +447,8 @@ const ClientesView: React.FC<{
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {clientesFiltrados.map((cliente) => {
-                const movimientosCliente = movimientos.filter(m => m.cliente_id === cliente.id);
-                const saldo = apiService.calcularSaldoCliente(movimientosCliente);
+                // ✅ CORREGIDO: Usar saldo del backend
+                const saldo = (cliente as any).saldo_actual || 0;
                 
                 return (
                   <tr key={cliente.id} className="hover:bg-gray-50">
@@ -483,7 +497,7 @@ const ClientesView: React.FC<{
   );
 };
 
-// Modal de exportación
+// Modal de exportación CORREGIDO
 const ExportModal: React.FC<{
   isOpen: boolean;
   onClose: () => void;
@@ -630,7 +644,7 @@ const ExportModal: React.FC<{
   );
 };
 
-// Vista de Estado de Cuenta Detallado con exportación
+// ✅ Vista de Estado de Cuenta CORREGIDA
 const EstadoCuentaView: React.FC<{
   clienteId: number;
   clientes: Cliente[];
@@ -653,34 +667,105 @@ const EstadoCuentaView: React.FC<{
     );
   }
 
-  // Calcular saldo final
-  const saldoFinal = apiService.calcularSaldoCliente(movimientos);
-  
-  // Agregar saldo acumulado a cada movimiento
-  let saldoAcumulado = 0;
-  const movimientosConSaldo = movimientos.map(mov => {
-    saldoAcumulado += mov.importe;
-    return {
-      ...mov,
-      saldo_acumulado: saldoAcumulado
-    };
-  });
+  // Calcular saldo final usando los movimientos con saldo_acumulado
+  const saldoFinal = movimientos.length > 0 ? movimientos[movimientos.length - 1].saldo_acumulado || 0 : 0;
 
+  // ✅ FUNCIÓN DE EXPORTACIÓN CORREGIDA
   const handleExport = async (formato: 'pdf' | 'excel', filtro: string, fechaDesde?: string, fechaHasta?: string) => {
     try {
       setExportLoading(true);
-      await exportService.exportarEstadoCuenta(
-        clienteId,
-        formato,
-        filtro as any,
-        fechaDesde,
-        fechaHasta
-      );
+      console.log(`📄 Exportando estado de cuenta - Cliente: ${clienteId}, Formato: ${formato}`);
+      
+      // ✅ USAR LA API CORRECTA
+      const response = await fetch(`/api/clientes/${clienteId}/exportar-estado-cuenta`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          formato,
+          filtro,
+          fechaDesde,
+          fechaHasta
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+
+      const { datos } = await response.json();
+      
+      // ✅ GENERAR ARCHIVO EN EL FRONTEND
+      if (formato === 'pdf') {
+        // Generar PDF simple
+        const printWindow = window.open('', '_blank');
+        if (printWindow) {
+          printWindow.document.write(`
+            <html>
+            <head><title>Estado de Cuenta - ${datos.cliente.razon_social}</title></head>
+            <body style="font-family: Arial, sans-serif; margin: 20px;">
+              <h1>FERABEN SRL</h1>
+              <h2>Estado de Cuenta</h2>
+              <p><strong>Cliente:</strong> ${datos.cliente.razon_social}</p>
+              <p><strong>RUT:</strong> ${datos.cliente.rut}</p>
+              <p><strong>Saldo Final:</strong> ${apiService.formatearMoneda(datos.saldoFinal)}</p>
+              <p><strong>Fecha:</strong> ${new Date().toLocaleDateString('es-UY')}</p>
+              <hr>
+              <h3>Movimientos:</h3>
+              <table border="1" style="width: 100%; border-collapse: collapse;">
+                <tr>
+                  <th>Fecha</th>
+                  <th>Tipo</th>
+                  <th>Documento</th>
+                  <th>Importe</th>
+                  <th>Saldo</th>
+                </tr>
+                ${datos.movimientos.map((mov: any) => `
+                  <tr>
+                    <td>${apiService.formatearFecha(mov.fecha)}</td>
+                    <td>${mov.tipo_movimiento}</td>
+                    <td>${mov.documento || '-'}</td>
+                    <td>${apiService.formatearMoneda(mov.importe)}</td>
+                    <td>${apiService.formatearMoneda(mov.saldo_acumulado)}</td>
+                  </tr>
+                `).join('')}
+              </table>
+            </body>
+            </html>
+          `);
+          printWindow.document.close();
+          printWindow.print();
+        }
+      } else {
+        // Generar Excel simple usando CSV
+        const csvContent = [
+          ['Fecha', 'Tipo', 'Documento', 'Importe', 'Saldo'],
+          ...datos.movimientos.map((mov: any) => [
+            apiService.formatearFecha(mov.fecha),
+            mov.tipo_movimiento,
+            mov.documento || '',
+            mov.importe,
+            mov.saldo_acumulado
+          ])
+        ].map(row => row.join(',')).join('\n');
+        
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `estado_cuenta_${datos.cliente.razon_social}_${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }
+      
       setShowExportModal(false);
       alert('Estado de cuenta exportado exitosamente');
     } catch (error) {
-      console.error('Error exportando:', error);
-      alert('Error al exportar el estado de cuenta');
+      console.error('❌ Error exportando:', error);
+      alert('Error al exportar el estado de cuenta. Revisa la consola.');
     } finally {
       setExportLoading(false);
     }
@@ -830,14 +915,14 @@ const EstadoCuentaView: React.FC<{
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {movimientosConSaldo.length === 0 ? (
+              {movimientos.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
                     No hay movimientos registrados para este cliente
                   </td>
                 </tr>
               ) : (
-                movimientosConSaldo.map((movimiento, index) => (
+                movimientos.map((movimiento, index) => (
                   <tr key={index} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {apiService.formatearFecha(movimiento.fecha)}
@@ -865,13 +950,13 @@ const EstadoCuentaView: React.FC<{
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <span className={`${
-                        movimiento.saldo_acumulado > 0 
+                        (movimiento.saldo_acumulado || 0) > 0 
                           ? 'text-red-600' 
-                          : movimiento.saldo_acumulado < 0 
+                          : (movimiento.saldo_acumulado || 0) < 0 
                           ? 'text-green-600' 
                           : 'text-gray-900'
                       }`}>
-                        {apiService.formatearMoneda(movimiento.saldo_acumulado)}
+                        {apiService.formatearMoneda(movimiento.saldo_acumulado || 0)}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
@@ -896,8 +981,7 @@ const EstadoCuentaView: React.FC<{
   );
 };
 
-// Vistas placeholder (las desarrollaremos después)
-// Vista de Movimientos con formulario integrado
+// ✅ Vista de Movimientos CORREGIDA
 const MovimientosView: React.FC<{ 
   movimientos: Movimiento[]; 
   clientes: Cliente[];
@@ -909,6 +993,7 @@ const MovimientosView: React.FC<{
   const handleCrearMovimiento = async (movimiento: NuevoMovimiento) => {
     try {
       setFormLoading(true);
+      console.log('💰 Creando movimiento:', movimiento);
       
       await apiService.createMovimiento({
         fecha: movimiento.fecha,
@@ -924,13 +1009,11 @@ const MovimientosView: React.FC<{
       onRefresh(); // Recargar datos
       alert('Movimiento creado exitosamente');
     } catch (error) {
-      console.error('Error creando movimiento:', error);
-      alert('Error al crear el movimiento');
+      console.error('❌ Error creando movimiento:', error);
+      alert('Error al crear el movimiento. Revisa la consola.');
     } finally {
       setFormLoading(false);
     }
-
-    
   };
 
   return (
@@ -989,7 +1072,7 @@ const MovimientosView: React.FC<{
                         ? 'bg-blue-100 text-blue-800'
                         : movimiento.tipo_movimiento === 'Pago'
                         ? 'bg-green-100 text-green-800'
-                        :movimiento.tipo_movimiento === 'Devolución'
+                        : movimiento.tipo_movimiento === 'Devolución'
                         ? 'bg-orange-100 text-orange-800'
                         : 'bg-purple-100 text-purple-800'
                     }`}>
