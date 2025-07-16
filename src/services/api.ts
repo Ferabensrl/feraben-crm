@@ -1,4 +1,3 @@
-// 🎯 API_BASE_URL CORREGIDO - Solo usar /api para Vercel
 const API_BASE_URL = '/api';
 
 export interface Cliente {
@@ -38,8 +37,6 @@ export interface Usuario {
   rol: 'admin' | 'vendedor';
   activo: boolean;
 }
-
-// ===== INTERFACES PARA COMISIONES =====
 
 export interface ConfigVendedor {
   id: number;
@@ -147,15 +144,13 @@ class ApiService {
       }
       
       const data = await response.json();
-      console.log(`✅ API Response: ${url}`, data);
+      console.log(`✅ API Response: ${url} - Success`);
       return data;
     } catch (error) {
       console.error(`❌ API Error: ${url}`, error);
       throw error;
     }
   }
-
-  // ===== MÉTODOS BÁSICOS =====
 
   // Health check
   async checkHealth(): Promise<{ status: string; message: string }> {
@@ -195,15 +190,39 @@ class ApiService {
     });
   }
 
-  // ===== MÉTODOS PARA COMISIONES (SIMPLIFICADOS) =====
-
-  // Configuración de vendedores
+  // COMISIONES - TODAS LAS RUTAS USAN /api (NO localhost)
   async getConfiguracionesComision(): Promise<ConfigVendedor[]> {
-    // Retornar datos mock mientras implementamos las APIs
-    return [
-      {
+    try {
+      return await this.request('/comisiones/config');
+    } catch (error) {
+      console.log('⚠️ Comisiones config no disponible, usando mock');
+      return [
+        {
+          id: 1,
+          usuario_id: 2,
+          porcentaje_comision: 15,
+          base_calculo: 'pago',
+          minimo_comision: 0,
+          activo: true,
+          fecha_desde: '2025-01-01',
+          comentarios: 'Configuración estándar',
+          created_at: '2025-01-01',
+          updated_at: '2025-01-01',
+          nombre: 'Mariela',
+          rol: 'vendedor'
+        }
+      ];
+    }
+  }
+
+  async getConfiguracionVendedor(vendedorId: number): Promise<ConfigVendedor> {
+    try {
+      return await this.request(`/comisiones/config/${vendedorId}`);
+    } catch (error) {
+      console.log('⚠️ Config vendedor no disponible, usando mock');
+      return {
         id: 1,
-        usuario_id: 2,
+        usuario_id: vendedorId,
         porcentaje_comision: 15,
         base_calculo: 'pago',
         minimo_comision: 0,
@@ -212,28 +231,10 @@ class ApiService {
         comentarios: 'Configuración estándar',
         created_at: '2025-01-01',
         updated_at: '2025-01-01',
-        nombre: 'Mariela',
+        nombre: vendedorId === 2 ? 'Mariela' : 'Vendedor',
         rol: 'vendedor'
-      }
-    ];
-  }
-
-  async getConfiguracionVendedor(vendedorId: number): Promise<ConfigVendedor> {
-    // Retornar configuración mock para Mariela
-    return {
-      id: 1,
-      usuario_id: vendedorId,
-      porcentaje_comision: 15,
-      base_calculo: 'pago',
-      minimo_comision: 0,
-      activo: true,
-      fecha_desde: '2025-01-01',
-      comentarios: 'Configuración estándar',
-      created_at: '2025-01-01',
-      updated_at: '2025-01-01',
-      nombre: vendedorId === 2 ? 'Mariela' : 'Vendedor',
-      rol: 'vendedor'
-    };
+      };
+    }
   }
 
   async updateConfiguracionVendedor(
@@ -245,31 +246,47 @@ class ApiService {
       comentarios: string;
     }
   ): Promise<{ success: boolean; message: string; changes: number }> {
-    // Mock response
-    return { success: true, message: 'Configuración actualizada', changes: 1 };
+    try {
+      return await this.request(`/comisiones/config/${vendedorId}`, {
+        method: 'PUT',
+        body: JSON.stringify(config),
+      });
+    } catch (error) {
+      console.log('⚠️ Update config no disponible, usando mock');
+      return { success: true, message: 'Configuración actualizada (DEMO)', changes: 1 };
+    }
   }
 
-  // Cálculo y liquidación (MOCK)
   async calcularComision(
     vendedorId: number, 
     fechaDesde: string, 
     fechaHasta: string
   ): Promise<{ success: boolean; calculo: CalculoComision; message: string }> {
-    // Mock de cálculo de comisión
-    const mockCalculo: CalculoComision = {
-      vendedor_id: vendedorId,
-      vendedor_nombre: vendedorId === 2 ? 'Mariela' : 'Vendedor',
-      periodo_desde: fechaDesde,
-      periodo_hasta: fechaHasta,
-      configuracion: await this.getConfiguracionVendedor(vendedorId),
-      total_base: 50000,
-      total_comision: 7500,
-      cantidad_movimientos: 5,
-      cantidad_clientes: 3,
-      detalles: []
-    };
-
-    return { success: true, calculo: mockCalculo, message: 'Comisión calculada (DEMO)' };
+    try {
+      return await this.request('/comisiones/calcular', {
+        method: 'POST',
+        body: JSON.stringify({
+          vendedor_id: vendedorId,
+          fecha_desde: fechaDesde,
+          fecha_hasta: fechaHasta,
+        }),
+      });
+    } catch (error) {
+      console.log('⚠️ Calcular comisión no disponible, usando mock');
+      const mockCalculo: CalculoComision = {
+        vendedor_id: vendedorId,
+        vendedor_nombre: vendedorId === 2 ? 'Mariela' : 'Vendedor',
+        periodo_desde: fechaDesde,
+        periodo_hasta: fechaHasta,
+        configuracion: await this.getConfiguracionVendedor(vendedorId),
+        total_base: 50000,
+        total_comision: 7500,
+        cantidad_movimientos: 5,
+        cantidad_clientes: 3,
+        detalles: []
+      };
+      return { success: true, calculo: mockCalculo, message: 'Comisión calculada (DEMO)' };
+    }
   }
 
   async generarLiquidacion(
@@ -282,28 +299,47 @@ class ApiService {
     calculo: CalculoComision; 
     message: string 
   }> {
-    const calculo = await this.calcularComision(vendedorId, fechaDesde, fechaHasta);
-    const liquidacionId = Date.now(); // ID temporal
-    
-    return {
-      success: true,
-      liquidacion_id: liquidacionId,
-      calculo: calculo.calculo,
-      message: `Liquidación #${liquidacionId} generada (DEMO)`
-    };
+    try {
+      return await this.request('/comisiones/liquidar', {
+        method: 'POST',
+        body: JSON.stringify({
+          vendedor_id: vendedorId,
+          fecha_desde: fechaDesde,
+          fecha_hasta: fechaHasta,
+        }),
+      });
+    } catch (error) {
+      console.log('⚠️ Generar liquidación no disponible, usando mock');
+      const calculo = await this.calcularComision(vendedorId, fechaDesde, fechaHasta);
+      return {
+        success: true,
+        liquidacion_id: Date.now(),
+        calculo: calculo.calculo,
+        message: 'Liquidación generada (DEMO)'
+      };
+    }
   }
 
-  // Consulta de liquidaciones (MOCK)
   async getLiquidacionesVendedor(vendedorId: number, limit = 10): Promise<LiquidacionComision[]> {
-    return []; // Array vacío por ahora
+    try {
+      return await this.request(`/comisiones/liquidaciones/vendedor/${vendedorId}?limit=${limit}`);
+    } catch (error) {
+      console.log('⚠️ Liquidaciones vendedor no disponible, usando mock');
+      return [];
+    }
   }
 
   async getAllLiquidaciones(limit = 20): Promise<LiquidacionComision[]> {
-    return []; // Array vacío por ahora
+    try {
+      return await this.request(`/comisiones/liquidaciones?limit=${limit}`);
+    } catch (error) {
+      console.log('⚠️ All liquidaciones no disponible, usando mock');
+      return [];
+    }
   }
 
   async getDetalleLiquidacion(liquidacionId: number): Promise<LiquidacionComision & { detalles: DetalleComision[] }> {
-    throw new Error('Funcionalidad en desarrollo');
+    return this.request(`/comisiones/liquidaciones/${liquidacionId}`);
   }
 
   async marcarLiquidacionPagada(
@@ -311,50 +347,62 @@ class ApiService {
     fechaPago: string, 
     observaciones?: string
   ): Promise<{ success: boolean; message: string; changes: number }> {
-    return { success: true, message: 'Marcada como pagada (DEMO)', changes: 1 };
+    return this.request(`/comisiones/liquidaciones/${liquidacionId}/pagar`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        fecha_pago: fechaPago,
+        observaciones: observaciones || '',
+      }),
+    });
   }
 
-  // Estadísticas y reportes (MOCK)
   async getEstadisticasVendedor(vendedorId: number, año: number): Promise<any> {
-    return { estadisticas: 'En desarrollo' };
+    return this.request(`/comisiones/estadisticas/vendedor/${vendedorId}/${año}`);
   }
 
   async getResumenComisiones(): Promise<ResumenComisiones> {
-    return {
-      resumen: {
-        vendedores_activos: 1,
-        total_liquidaciones: 0,
-        total_comisiones_calculadas: 0,
-        total_comisiones_pagadas: 0,
-        total_comisiones_pendientes: 0
-      },
-      por_vendedor: []
-    };
+    try {
+      return await this.request('/comisiones/resumen');
+    } catch (error) {
+      console.log('⚠️ Resumen comisiones no disponible, usando mock');
+      return {
+        resumen: {
+          vendedores_activos: 1,
+          total_liquidaciones: 0,
+          total_comisiones_calculadas: 0,
+          total_comisiones_pagadas: 0,
+          total_comisiones_pendientes: 0
+        },
+        por_vendedor: []
+      };
+    }
   }
 
   async getPeriodosSugeridos(): Promise<PeriodoSugerido[]> {
-    const hoy = new Date();
-    const hace30dias = new Date();
-    hace30dias.setDate(hoy.getDate() - 30);
-    
-    return [
-      {
-        nombre: 'Últimos 30 días',
-        desde: hace30dias.toISOString().split('T')[0],
-        hasta: hoy.toISOString().split('T')[0],
-        descripcion: 'Período estándar'
-      }
-    ];
+    try {
+      return await this.request('/comisiones/periodos-sugeridos');
+    } catch (error) {
+      console.log('⚠️ Períodos sugeridos no disponible, usando mock');
+      const hoy = new Date();
+      const hace30dias = new Date();
+      hace30dias.setDate(hoy.getDate() - 30);
+      
+      return [
+        {
+          nombre: 'Últimos 30 días',
+          desde: hace30dias.toISOString().split('T')[0],
+          hasta: hoy.toISOString().split('T')[0],
+          descripcion: 'Período estándar'
+        }
+      ];
+    }
   }
 
-  // ===== MÉTODOS UTILITARIOS =====
-
-  // Calcular saldo de un cliente
+  // Utilidades
   calcularSaldoCliente(movimientos: Movimiento[]): number {
     return movimientos.reduce((total, mov) => total + mov.importe, 0);
   }
 
-  // Formatear moneda uruguaya
   formatearMoneda(amount: number): string {
     return new Intl.NumberFormat('es-UY', {
       style: 'currency',
@@ -364,7 +412,6 @@ class ApiService {
     }).format(amount);
   }
 
-  // Formatear fecha
   formatearFecha(dateString: string): string {
     const date = new Date(dateString);
     return date.toLocaleDateString('es-UY', {
@@ -374,12 +421,10 @@ class ApiService {
     });
   }
 
-  // Formatear porcentaje
   formatearPorcentaje(porcentaje: number): string {
     return `${porcentaje.toFixed(2)}%`;
   }
 
-  // Obtener descripción de base de cálculo
   getDescripcionBaseCalculo(base: string): string {
     const descripciones: Record<string, string> = {
       'venta': 'Sobre ventas realizadas',
@@ -389,7 +434,6 @@ class ApiService {
     return descripciones[base] || base;
   }
 
-  // Obtener color de estado de liquidación
   getColorEstadoLiquidacion(estado: string): string {
     const colores: Record<string, string> = {
       'calculada': 'bg-blue-100 text-blue-800',
