@@ -1,0 +1,507 @@
+MOVIMIENTOS NO IMPORTADOS (101)
+
+Fila 669: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Vendedor": 0
+}
+---
+Fila 670: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Vendedor": 0
+}
+---
+Fila 671: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Vendedor": 0
+}
+---
+Fila 672: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Vendedor": 0
+}
+---
+Fila 673: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Vendedor": 0
+}
+---
+Fila 674: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Vendedor": 0
+}
+---
+Fila 675: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Vendedor": 0
+}
+---
+Fila 676: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Vendedor": 0
+}
+---
+Fila 677: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Vendedor": 0
+}
+---
+Fila 678: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Vendedor": 0
+}
+---
+Fila 679: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Vendedor": 0
+}
+---
+Fila 680: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Vendedor": 0
+}
+---
+Fila 681: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Vendedor": 0
+}
+---
+Fila 682: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Vendedor": 0
+}
+---
+Fila 1456: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1457: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1458: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1459: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1460: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1461: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1462: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1463: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1464: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1465: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1466: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1467: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1468: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1469: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1470: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1471: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1472: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1473: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1474: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1475: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1476: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1477: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1478: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1479: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1480: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1481: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1482: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1483: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1484: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1485: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1486: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1487: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1488: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1489: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1490: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1491: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1492: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1493: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1494: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1495: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1496: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1497: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1498: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1499: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1500: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1501: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1502: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1503: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1504: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1505: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1506: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1507: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1508: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1509: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1510: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1511: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1512: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1513: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1514: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1515: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1516: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1517: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1518: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1519: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1520: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1521: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1522: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1523: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1524: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1525: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1526: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1527: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1528: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1529: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1530: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1531: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1532: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1533: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1534: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1535: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1536: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1537: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1538: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1539: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1540: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1541: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---
+Fila 1542: Faltan datos obligatorios (Cliente o Tipo)
+Datos: {
+  "Saldo Cliente": 0
+}
+---

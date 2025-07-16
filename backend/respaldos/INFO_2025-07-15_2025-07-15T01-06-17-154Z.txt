@@ -1,0 +1,21 @@
+
+RESPALDO FERABEN CRM
+===================
+
+Fecha de creación: 14/7/2025, 10:06:17 p. m.
+Versión del sistema: 1.0
+
+CONTENIDO DEL RESPALDO:
+- Feraben_CRM_Respaldo_2025-07-15_2025-07-15T01-06-17-154Z.xlsx: Archivo Excel con todos los datos
+- feraben_backup_2025-07-15_2025-07-15T01-06-17-154Z.db: Base de datos SQLite completa
+
+ESTADÍSTICAS:
+- Clientes: 93
+- Movimientos: 1440
+- Vendedores activos: 2
+
+INSTRUCCIONES DE RESTAURACIÓN:
+1. Para importar Excel: Usar función de importación del CRM
+2. Para restaurar DB: Reemplazar feraben.db con el archivo de respaldo
+
+¡Datos seguros y respaldados!

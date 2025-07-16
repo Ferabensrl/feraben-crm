@@ -1,0 +1,17 @@
+CLIENTES CON ADVERTENCIAS (5)
+
+Fila 86: FARMACIA LISSET
+Advertencia: RUT generado automáticamente: FARMACIAL_85
+---
+Fila 89: NOELIA DE ARMAS
+Advertencia: RUT generado automáticamente: NOELIADE_88
+---
+Fila 90: FARMACIA LUDOMAR
+Advertencia: RUT generado automáticamente: FARMACIAL_89
+---
+Fila 91: HAYDEE SUAREZ
+Advertencia: RUT generado automáticamente: HAYDEESUA_90
+---
+Fila 94: PAULA MAMA VALE
+Advertencia: RUT generado automáticamente: PAULAMAMA_93
+---
